@@ -97,6 +97,16 @@ const Projects = () => {
                             key={idx}
                             className="glass rounded-2xl overflow-hidden border border-white/5 glow-hover flex flex-col justify-between text-left h-full group"
                         >
+                            {/* Card Image Cover */}
+                            <div className="relative overflow-hidden aspect-video border-b border-white/5">
+                                <img 
+                                    src={project.imageUrl || 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80'} 
+                                    alt={project.title}
+                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent pointer-events-none" />
+                            </div>
+
                             {/* Card Top / Header */}
                             <div className="p-6 space-y-4">
                                 <div className="flex items-center justify-between">
