@@ -52,16 +52,37 @@
     --color-secondary-hover: #0891b2;
 }
 
+.cyberpunk-neon {
+    --color-primary: #ff007f;
+    --color-primary-hover: #e6006f;
+    --color-border-glow: #ff007f;
+    --color-secondary: #00f0ff;
+    --color-secondary-hover: #00d2e0;
+}
+
+.minimalist-clean {
+    --color-primary: #0f172a;
+    --color-primary-hover: #1e293b;
+    --color-border-glow: #cbd5e1;
+    --color-secondary: #475569;
+    --color-secondary-hover: #334155;
+    --color-background: #ffffff;
+    --color-foreground: #0f172a;
+    --color-card: #f8fafc;
+    --color-card-hover: #f1f5f9;
+    --color-border: #e2e8f0;
+}
+
 @layer base {
     html {
         scroll-behavior: smooth;
     }
 
-    body {
-        background-color: var(--color-background);
+    html, body {
+        background-color: #080c10;
         color: var(--color-foreground);
         font-family: 'Outfit', 'Inter', sans-serif;
-        overflow-x: hidden;
+        overflow-x: clip;
     }
 
     /* Custom Scrollbar */

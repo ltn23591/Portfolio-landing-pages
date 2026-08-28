@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Button from '../components/Button';
 import { Mail, MapPin, Phone, Send, Github, Linkedin, MessageSquare } from 'lucide-react';
+import { API_URL } from '../config/api';
 
 const Contact = ({ settings }) => {
     const [formData, setFormData] = useState({
@@ -30,7 +31,7 @@ const Contact = ({ settings }) => {
         setIsLoading(true);
         setErrorMsg('');
         try {
-            const response = await fetch('http://localhost:3000/api/contact', {
+            const response = await fetch(`${API_URL}/api/contact`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -49,7 +50,7 @@ const Contact = ({ settings }) => {
                 setErrorMsg(error);
             }
         } catch (error) {
-            setErrorMsg('Không thể kết nối đến máy chủ. Vui lòng kiểm tra xem backend đang chạy tại http://localhost:3000');
+            setErrorMsg(`Không thể kết nối đến máy chủ. Vui lòng kiểm tra xem backend đang chạy tại ${API_URL}`);
         } finally {
             setIsLoading(false);
         }

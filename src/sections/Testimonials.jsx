@@ -1,5 +1,6 @@
 import React from 'react';
 import { Star, Quote } from 'lucide-react';
+import { API_URL } from '../config/api';
 
 const Testimonials = () => {
     const [testimonials, setTestimonials] = React.useState([
@@ -22,7 +23,7 @@ const Testimonials = () => {
     React.useEffect(() => {
         const fetchTestimonials = async () => {
             try {
-                const res = await fetch('http://localhost:3000/api/portfolio/testimonials');
+                const res = await fetch(`${API_URL}/api/portfolio/testimonials`);
                 if (res.ok) {
                     const data = await res.json();
                     if (data && data.length > 0) setTestimonials(data);
@@ -35,7 +36,7 @@ const Testimonials = () => {
     }, []);
 
     return (
-        <section id="testimonials" className="py-28 relative overflow-hidden bg-slate-950/20">
+        <section id="testimonials" className="py-28 relative overflow-hidden bg-[#080c10] z-20">
             {/* Background orbs */}
             <div className="absolute bottom-10 right-10 w-96 h-96 bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
 

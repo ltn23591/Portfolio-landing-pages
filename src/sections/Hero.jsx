@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from '../components/Button';
 import { ArrowRight, Download, Github, Linkedin, Mail, Server } from 'lucide-react';
+import { API_URL } from '../config/api';
 
 const Hero = () => {
     const [heroData, setHeroData] = React.useState({
@@ -15,7 +16,7 @@ const Hero = () => {
     React.useEffect(() => {
         const fetchHero = async () => {
             try {
-                const res = await fetch('http://localhost:3000/api/portfolio/hero');
+                const res = await fetch(`${API_URL}/api/portfolio/hero`);
                 if (res.ok) {
                     const data = await res.json();
                     if (data) {

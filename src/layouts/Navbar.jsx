@@ -13,14 +13,22 @@ const Navbar = ({ logoText = 'LE TRUNG NGHIA' }) => {
         { href: '#experience', id: 'experience', label: 'Kinh Nghiệm' },
         { href: '#testimonials', id: 'testimonials', label: 'Đánh Giá' },
         { href: '#contact', id: 'contact', label: 'Liên Hệ' },
+        { href: '#tech-docs', id: 'tech-docs', label: 'Tài Liệu' },
+        { href: '#tech-docs-toolbox', id: 'tech-docs-toolbox', label: 'Công Cụ Dev' },
     ];
 
     useEffect(() => {
         const handleScroll = () => {
+            if (window.location.hash.startsWith('#tech-docs')) {
+                setActiveSection(window.location.hash.replace('#', ''));
+                return;
+            }
             setIsScrolled(window.scrollY > 30);
             
-            // Check active section
-            const sections = navLinks.map(link => document.getElementById(link.id));
+            // Check active section (filter out tech-docs which has no DOM element on homepage)
+            const sections = navLinks
+                .filter(l => !l.id.startsWith('tech-docs'))
+                .map(link => document.getElementById(link.id));
             let current = 'hero';
             
             const scrollPosition = window.scrollY + 200;
@@ -38,6 +46,15 @@ const Navbar = ({ logoText = 'LE TRUNG NGHIA' }) => {
     }, []);
 
     const handleNavClick = (e, href) => {
+        if (href.startsWith('#tech-docs') || window.location.hash.startsWith('#tech-docs')) {
+            setIsMobileMenuOpen(false);
+            if (href.startsWith('#tech-docs')) {
+                window.location.hash = href;
+            } else {
+                window.location.href = '/' + href;
+            }
+            return;
+        }
         e.preventDefault();
         const targetId = href.replace('#', '');
         const targetElement = document.getElementById(targetId);
@@ -50,11 +67,13 @@ const Navbar = ({ logoText = 'LE TRUNG NGHIA' }) => {
         }
     };
 
+    const isTechDocsPage = typeof window !== 'undefined' && window.location.hash.startsWith('#tech-docs');
+
     return (
         <header 
             className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-                isScrolled 
-                    ? 'py-4 bg-background/85 backdrop-blur-md border-b border-border/40' 
+                isScrolled || isTechDocsPage
+                    ? 'py-4 bg-slate-950/90 backdrop-blur-xl border-b border-white/10 shadow-2xl' 
                     : 'py-6 bg-transparent'
             }`}
         >

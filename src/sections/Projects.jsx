@@ -1,13 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { ExternalLink, Github, FolderGit2, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { ExternalLink, Github, FolderGit2, ChevronLeft, ChevronRight, X, Maximize2 } from 'lucide-react';
+import { API_URL } from '../config/api';
 
 const ProjectCard = ({ project }) => {
-    const images = (project.images && project.images.length > 0)
+    const defaultFallback = 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80';
+    const rawImages = (project.images && project.images.length > 0)
         ? project.images
-        : ['https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80'];
+        : [defaultFallback];
 
+    const [images, setImages] = useState(rawImages);
     const [currentIdx, setCurrentIdx] = useState(0);
     const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+
+    useEffect(() => {
+        setImages(rawImages);
+    }, [project.images]);
+
+    // Automatic slideshow transition timer (every 3.5s)
+    useEffect(() => {
+        if (!images || images.length <= 1) return;
+        const interval = setInterval(() => {
+            setCurrentIdx(prev => (prev >= images.length - 1 ? 0 : prev + 1));
+        }, 3500);
+        return () => clearInterval(interval);
+    }, [images]);
 
     const prevImage = (e) => {
         e.preventDefault();
@@ -21,43 +37,72 @@ const ProjectCard = ({ project }) => {
         setCurrentIdx(prev => (prev === images.length - 1 ? 0 : prev + 1));
     };
 
+    const handleImgError = (e) => {
+        e.target.src = defaultFallback;
+    };
+
     return (
         <>
             <article className="glass rounded-2xl overflow-hidden border border-white/5 glow-hover flex flex-col justify-between text-left h-full group">
-                {/* Card Image Slider Cover */}
-                <div 
+                {/* Card Image Slider Cover with blurred background to show full image */}
+                <div
                     onClick={() => setIsLightboxOpen(true)}
-                    className="relative overflow-hidden aspect-video border-b border-white/5 group/slider cursor-zoom-in"
+                    className="relative overflow-hidden aspect-video border-b border-white/5 group/slider cursor-zoom-in bg-slate-950 flex items-center justify-center"
                 >
-                    <img 
-                        src={images[currentIdx]} 
-                        alt={project.title}
-                        className="w-full h-full object-cover transition-all duration-500 group-hover:scale-[1.02]"
-                    />
-                    
-                    {/* Gradient shade overlays */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent pointer-events-none" />
-                    
+                    {/* Stacked blurred background copies for ultra-smooth cross-fade */}
+                    {images.map((img, idx) => (
+                        <img
+                            key={`blur-${idx}`}
+                            src={img || defaultFallback}
+                            alt=""
+                            onError={handleImgError}
+                            className={`absolute inset-0 w-full h-full object-cover blur-xl transition-all duration-1000 ease-in-out pointer-events-none select-none ${currentIdx === idx ? 'opacity-40 scale-110' : 'opacity-0 scale-100'
+                                }`}
+                        />
+                    ))}
+
+                    {/* Stacked sharp foreground images for silky-smooth cross-fade */}
+                    {images.map((img, idx) => (
+                        <img
+                            key={`fg-${idx}`}
+                            src={img || defaultFallback}
+                            alt={project.title}
+                            onError={handleImgError}
+                            className={`absolute inset-0 w-full h-full object-contain p-2 transition-all duration-1000 ease-in-out z-10 ${currentIdx === idx
+                                    ? 'opacity-100 scale-100 pointer-events-auto'
+                                    : 'opacity-0 scale-95 pointer-events-none'
+                                }`}
+                        />
+                    ))}
+
+                    {/* Dark gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/45 via-transparent to-transparent pointer-events-none z-10" />
+
+                    {/* Zoom Icon overlay on hover */}
+                    <div className="absolute top-3 right-3 p-1.5 rounded-lg bg-slate-950/60 border border-white/10 text-white opacity-0 group-hover/slider:opacity-100 transition-opacity duration-300 z-20 pointer-events-none">
+                        <Maximize2 className="w-3.5 h-3.5" />
+                    </div>
+
                     {/* Navigation Buttons (Only visible if > 1 image) */}
                     {images.length > 1 && (
                         <>
-                            <button 
+                            <button
                                 type="button"
                                 onClick={prevImage}
-                                className="absolute left-2.5 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-slate-950/60 border border-white/10 text-white hover:bg-primary transition-all duration-300 opacity-0 group-hover/slider:opacity-100 cursor-pointer"
+                                className="absolute left-2.5 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-slate-950/70 border border-white/10 text-white hover:bg-primary transition-all duration-300 opacity-0 group-hover/slider:opacity-100 cursor-pointer z-20"
                             >
                                 <ChevronLeft className="w-4 h-4" />
                             </button>
-                            <button 
+                            <button
                                 type="button"
                                 onClick={nextImage}
-                                className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-slate-950/60 border border-white/10 text-white hover:bg-primary transition-all duration-300 opacity-0 group-hover/slider:opacity-100 cursor-pointer"
+                                className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-slate-950/70 border border-white/10 text-white hover:bg-primary transition-all duration-300 opacity-0 group-hover/slider:opacity-100 cursor-pointer z-20"
                             >
                                 <ChevronRight className="w-4 h-4" />
                             </button>
-                            
+
                             {/* Slide Indicator Dots */}
-                            <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+                            <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 flex gap-1.5 z-20">
                                 {images.map((_, idx) => (
                                     <button
                                         key={idx}
@@ -67,9 +112,8 @@ const ProjectCard = ({ project }) => {
                                             e.stopPropagation();
                                             setCurrentIdx(idx);
                                         }}
-                                        className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                                            currentIdx === idx ? 'bg-primary w-3' : 'bg-white/40 hover:bg-white/80'
-                                        }`}
+                                        className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${currentIdx === idx ? 'bg-primary w-3' : 'bg-white/40 hover:bg-white/80'
+                                            }`}
                                     />
                                 ))}
                             </div>
@@ -84,24 +128,48 @@ const ProjectCard = ({ project }) => {
                             <FolderGit2 className="w-6 h-6 text-primary group-hover:text-secondary transition-colors duration-300" />
                         </div>
                         <div className="flex items-center gap-3">
-                            <a
-                                href={project.github}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="p-2 rounded-full hover:bg-white/10 text-muted-foreground hover:text-white transition-all duration-300"
-                                title="GitHub Code"
-                            >
-                                <Github className="w-5 h-5" />
-                            </a>
-                            <a
-                                href={project.live}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="p-2 rounded-full hover:bg-white/10 text-muted-foreground hover:text-primary transition-all duration-300"
-                                title="Live Demo"
-                            >
-                                <ExternalLink className="w-5 h-5" />
-                            </a>
+                            {/* GitHub Repos Multi-Link Capsule or Fallback */}
+                            {project.repos && project.repos.length > 0 ? (
+                                <div className="flex items-center gap-1.5 bg-white/5 border border-white/10 rounded-xl p-1">
+                                    <span className="text-[10px] text-muted-foreground font-bold pl-1.5 pr-0.5 select-none">Code:</span>
+                                    {project.repos.map((repo, idx) => (
+                                        <a
+                                            key={idx}
+                                            href={repo.url}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            className="px-2 py-0.5 rounded-md bg-slate-900 border border-white/5 text-[9px] font-bold text-slate-300 hover:text-primary hover:border-primary/30 transition-all duration-300"
+                                            title={`Xem mã nguồn ${repo.label}`}
+                                        >
+                                            {repo.label}
+                                        </a>
+                                    ))}
+                                </div>
+                            ) : (
+                                project.github && (
+                                    <a
+                                        href={project.github}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="p-2 rounded-full hover:bg-white/10 text-muted-foreground hover:text-white transition-all duration-300"
+                                        title="GitHub Code"
+                                    >
+                                        <Github className="w-5 h-5" />
+                                    </a>
+                                )
+                            )}
+
+                            {project.live && (
+                                <a
+                                    href={project.live}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="p-2 rounded-full hover:bg-white/10 text-muted-foreground hover:text-primary transition-all duration-300"
+                                    title="Live Demo"
+                                >
+                                    <ExternalLink className="w-5 h-5" />
+                                </a>
+                            )}
                         </div>
                     </div>
 
@@ -132,12 +200,12 @@ const ProjectCard = ({ project }) => {
 
             {/* Lightbox / Fullscreen Image Overlay */}
             {isLightboxOpen && (
-                <div 
+                <div
                     className="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[100] flex items-center justify-center p-4 md:p-8"
                     onClick={() => setIsLightboxOpen(false)}
                 >
                     {/* Close Button */}
-                    <button 
+                    <button
                         onClick={() => setIsLightboxOpen(false)}
                         className="absolute top-6 right-6 p-2.5 rounded-full bg-white/5 border border-white/10 text-white hover:bg-rose-600 transition-colors cursor-pointer"
                     >
@@ -146,7 +214,7 @@ const ProjectCard = ({ project }) => {
 
                     {/* Navigation Prev Button */}
                     {images.length > 1 && (
-                        <button 
+                        <button
                             onClick={(e) => {
                                 e.stopPropagation();
                                 prevImage(e);
@@ -158,16 +226,16 @@ const ProjectCard = ({ project }) => {
                     )}
 
                     {/* High-res Image */}
-                    <img 
-                        src={images[currentIdx]} 
+                    <img
+                        src={images[currentIdx]}
                         alt={project.title}
                         className="max-w-full max-h-[85vh] rounded-xl object-contain border border-white/10 shadow-2xl select-none"
-                        onClick={(e) => e.stopPropagation()} 
+                        onClick={(e) => e.stopPropagation()}
                     />
 
                     {/* Navigation Next Button */}
                     {images.length > 1 && (
-                        <button 
+                        <button
                             onClick={(e) => {
                                 e.stopPropagation();
                                 nextImage(e);
@@ -227,7 +295,7 @@ const Projects = () => {
     useEffect(() => {
         const fetchProjects = async () => {
             try {
-                const res = await fetch('http://localhost:3000/api/portfolio/projects');
+                const res = await fetch(`${API_URL}/api/portfolio/projects`);
                 if (res.ok) {
                     const data = await res.json();
                     if (data && data.length > 0) setProjectsList(data);
@@ -266,11 +334,10 @@ const Projects = () => {
                             <button
                                 key={cat.id}
                                 onClick={() => setActiveFilter(cat.id)}
-                                className={`px-5 py-2 text-sm font-semibold rounded-full transition-all duration-300 cursor-pointer ${
-                                    activeFilter === cat.id
+                                className={`px-5 py-2 text-sm font-semibold rounded-full transition-all duration-300 cursor-pointer ${activeFilter === cat.id
                                         ? 'bg-gradient-to-r from-primary to-secondary text-white shadow-md'
                                         : 'text-muted-foreground hover:text-white'
-                                }`}
+                                    }`}
                             >
                                 {cat.label}
                             </button>

@@ -7,8 +7,13 @@ import Experience from './sections/Experience';
 import Hero from './sections/Hero';
 import Projects from './sections/Projects';
 import Testimonials from './sections/Testimonials';
+import TechDocs from './sections/TechDocs';
+import ThreeCanvas from './components/ThreeCanvas';
+import { io } from 'socket.io-client';
+import { API_URL } from './config/api';
 
 function App() {
+    const [currentView, setCurrentView] = useState('home');
     const [settings, setSettings] = useState({
         logoText: 'LE TRUNG NGHIA',
         footerText: '© 2026 Le Trung Nghia. All rights reserved.',
@@ -31,7 +36,7 @@ function App() {
     useEffect(() => {
         const fetchSettings = async () => {
             try {
-                const res = await fetch('http://localhost:3000/api/portfolio/settings');
+                const res = await fetch(`${API_URL}/api/portfolio/settings`);
                 if (res.ok) {
                     const data = await res.json();
                     if (data) setSettings(data);
@@ -43,17 +48,42 @@ function App() {
         fetchSettings();
     }, []);
 
+    useEffect(() => {
+        const socket = io(API_URL);
+        return () => {
+            socket.disconnect();
+        };
+    }, []);
+
+    useEffect(() => {
+        const handleHashChange = () => {
+            if (window.location.hash.startsWith('#tech-docs')) {
+                setCurrentView('tech-docs');
+            } else {
+                setCurrentView('home');
+            }
+        };
+        window.addEventListener('hashchange', handleHashChange);
+        handleHashChange(); // Initial check
+        return () => window.removeEventListener('hashchange', handleHashChange);
+    }, []);
+
     return (
-        <div className={`min-h-screen overflow-x-hidden ${settings.themeMode}`}>
+        <div className={`min-h-screen overflow-x-clip relative bg-[#080c10] text-[#f0f2f5] ${settings.themeMode}`}>
+            {settings.themeMode !== 'minimalist-clean' && <ThreeCanvas />}
             <Navbar logoText={settings.logoText} />
-            <main>
-                {settings.showHero && <Hero />}
-                {settings.showAbout && <About />}
-                {settings.showProjects && <Projects />}
-                {settings.showExperience && <Experience />}
-                {settings.showTestimonials && <Testimonials />}
-                {settings.showContact && <Contact settings={settings} />}
-            </main>
+            {currentView === 'tech-docs' ? (
+                <TechDocs />
+            ) : (
+                <main>
+                    {settings.showHero && <Hero />}
+                    {settings.showAbout && <About />}
+                    {settings.showProjects && <Projects />}
+                    {settings.showExperience && <Experience />}
+                    {settings.showTestimonials && <Testimonials />}
+                    {settings.showContact && <Contact settings={settings} />}
+                </main>
+            )}
             <footer className="py-8 bg-slate-950 text-center border-t border-white/5">
                 <p className="text-sm text-muted-foreground">{settings.footerText}</p>
             </footer>
