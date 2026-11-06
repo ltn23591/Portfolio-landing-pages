@@ -161,13 +161,16 @@ const Hero = ({ settings }) => {
                                 { label: 'Kinh nghiệm', value: statsData.statExp },
                                 { label: 'Dự án thực chiến', value: statsData.statProjects },
                                 { label: 'Độ trễ API TB', value: statsData.statSatisfaction },
-                                { label: 'Độ ổn định', value: statsData.statOpenSource },
+                                {
+                                    label: statsData.statOpenSource?.toLowerCase().includes('uptime') ? 'Uptime / Ổn định' : 'Độ ổn định',
+                                    value: statsData.statOpenSource?.replace(/\s*uptime/i, '').trim() || statsData.statOpenSource,
+                                },
                             ].map((item, idx) => (
-                                <SpotlightCard key={idx} className="p-3.5 text-left">
-                                    <div className="text-base md:text-lg font-orbitron font-bold text-primary">
+                                <SpotlightCard key={idx} className="p-3 sm:p-3.5 text-left flex flex-col justify-center">
+                                    <div className="text-sm sm:text-base md:text-lg font-orbitron font-bold text-primary whitespace-nowrap">
                                         {item.value}
                                     </div>
-                                    <div className="text-xs text-muted-foreground font-space mt-0.5">
+                                    <div className="text-xs text-muted-foreground font-space mt-0.5 truncate">
                                         {item.label}
                                     </div>
                                 </SpotlightCard>
