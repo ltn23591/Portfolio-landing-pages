@@ -24,15 +24,15 @@ const Navbar = ({ logoText = 'LE TRUNG NGHIA' }) => {
                 return;
             }
             setIsScrolled(window.scrollY > 30);
-            
+
             // Check active section (filter out tech-docs which has no DOM element on homepage)
             const sections = navLinks
                 .filter(l => !l.id.startsWith('tech-docs'))
                 .map(link => document.getElementById(link.id));
             let current = 'hero';
-            
+
             const scrollPosition = window.scrollY + 200;
-            
+
             for (const section of sections) {
                 if (section && scrollPosition >= section.offsetTop) {
                     current = section.id;
@@ -70,12 +70,11 @@ const Navbar = ({ logoText = 'LE TRUNG NGHIA' }) => {
     const isTechDocsPage = typeof window !== 'undefined' && window.location.hash.startsWith('#tech-docs');
 
     return (
-        <header 
-            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-                isScrolled || isTechDocsPage
-                    ? 'py-4 bg-slate-950/90 backdrop-blur-xl border-b border-white/10 shadow-2xl' 
+        <header
+            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled || isTechDocsPage
+                    ? 'py-4 bg-slate-950/90 backdrop-blur-xl border-b border-white/10 shadow-2xl'
                     : 'py-6 bg-transparent'
-            }`}
+                }`}
         >
             <nav className="container mx-auto px-6 flex items-center justify-between">
                 <a
@@ -91,11 +90,10 @@ const Navbar = ({ logoText = 'LE TRUNG NGHIA' }) => {
                     <div className="glass-pill flex items-center rounded-full px-2 py-1.5 gap-1">
                         {navLinks.map((link, index) => (
                             <a
-                                className={`px-4 py-1.5 text-sm font-medium rounded-full transition-all duration-300 ${
-                                    activeSection === link.id
+                                className={`px-4 py-1.5 text-sm font-medium rounded-full transition-all duration-300 ${activeSection === link.id
                                         ? 'bg-gradient-to-r from-primary/20 to-secondary/20 text-primary border border-primary/20'
                                         : 'text-muted-foreground hover:text-white border border-transparent'
-                                }`}
+                                    }`}
                                 href={link.href}
                                 onClick={(e) => handleNavClick(e, link.href)}
                                 key={index}
@@ -108,8 +106,8 @@ const Navbar = ({ logoText = 'LE TRUNG NGHIA' }) => {
 
                 {/* CTA BTN */}
                 <div className="hidden md:block">
-                    <Button 
-                        size="sm" 
+                    <Button
+                        size="sm"
                         variant="glass"
                         onClick={(e) => handleNavClick(e, '#contact')}
                     >
@@ -133,9 +131,8 @@ const Navbar = ({ logoText = 'LE TRUNG NGHIA' }) => {
                     <div className="container mx-auto px-6 py-6 flex flex-col gap-4">
                         {navLinks.map((link, index) => (
                             <a
-                                className={`text-lg py-2 border-b border-border/10 transition-colors duration-300 ${
-                                    activeSection === link.id ? 'text-primary font-semibold' : 'text-muted-foreground hover:text-white'
-                                }`}
+                                className={`text-lg py-2 border-b border-border/10 transition-colors duration-300 ${activeSection === link.id ? 'text-primary font-semibold' : 'text-muted-foreground hover:text-white'
+                                    }`}
                                 href={link.href}
                                 onClick={(e) => handleNavClick(e, link.href)}
                                 key={index}
@@ -143,8 +140,8 @@ const Navbar = ({ logoText = 'LE TRUNG NGHIA' }) => {
                                 {link.label}
                             </a>
                         ))}
-                        <Button 
-                            size="default" 
+                        <Button
+                            size="default"
                             variant="primary"
                             className="mt-2 w-full"
                             onClick={(e) => handleNavClick(e, '#contact')}

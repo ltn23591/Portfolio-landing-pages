@@ -31,8 +31,8 @@ const ThreeCanvas = () => {
         const objectsGroup = new THREE.Group();
         scene.add(objectsGroup);
 
-        // A. Wireframe Torus Knot
-        const torusKnotGeo = new THREE.TorusKnotGeometry(0.8, 0.25, 128, 32);
+        // A. Wireframe Torus Knot (Optimized subdivisions)
+        const torusKnotGeo = new THREE.TorusKnotGeometry(0.8, 0.25, 48, 12);
         const torusKnotMat = new THREE.MeshStandardMaterial({
             color: 0x14b8a6,
             wireframe: true,
@@ -71,8 +71,8 @@ const ThreeCanvas = () => {
         octaMesh.position.set(-2.5, -4, -1);
         objectsGroup.add(octaMesh);
 
-        // 4. Three.js Journey Particle Field
-        const particlesCount = 1200;
+        // 4. Three.js Journey Particle Field (Optimized particles count)
+        const particlesCount = 300;
         const positions = new Float32Array(particlesCount * 3);
         const colors = new Float32Array(particlesCount * 3);
 
@@ -146,8 +146,18 @@ const ThreeCanvas = () => {
 
         // 7. Animation Loop with Smooth LERP & Scroll Reactivity
         const clock = new THREE.Clock();
+        let lastRenderTime = 0;
+        const fpsInterval = 1000 / 30; // Limit rendering to 30 FPS for high efficiency
 
-        const animate = () => {
+        const animate = (timestamp) => {
+            requestAnimationFrame(animate);
+
+            // FPS Control
+            if (!timestamp) timestamp = performance.now();
+            const elapsed = timestamp - lastRenderTime;
+            if (elapsed < fpsInterval) return;
+            lastRenderTime = timestamp - (elapsed % fpsInterval);
+
             const elapsedTime = clock.getElapsedTime();
             const scrollY = window.scrollY;
 
@@ -175,10 +185,10 @@ const ThreeCanvas = () => {
             particleSystem.rotation.y = elapsedTime * 0.03;
 
             renderer.render(scene, camera);
-            requestAnimationFrame(animate);
         };
 
         animate();
+
 
         // 8. Resize Handler
         const handleResize = () => {
