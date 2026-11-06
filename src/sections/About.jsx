@@ -315,24 +315,26 @@ const About = () => {
 
                         <div className="space-y-4">
                             {categories.map((cat, idx) => (
-                                <SpotlightCard key={idx} className="p-5 space-y-3.5">
-                                    <div className="flex items-center gap-3">
-                                        <div className="p-2 rounded-lg bg-white/5 border border-white/10">
+                                <SpotlightCard key={idx} className="p-6">
+                                    <div className="flex flex-col gap-5">
+                                    <div className="flex items-center gap-3.5">
+                                        <div className="p-2.5 rounded-lg bg-white/5 border border-white/10">
                                             {cat.icon}
                                         </div>
-                                        <h4 className="font-bold font-orbitron text-white text-sm tracking-wide">
+                                        <h4 className="font-bold font-orbitron text-white text-base tracking-wide">
                                             {cat.title}
                                         </h4>
                                     </div>
-                                    <div className="flex flex-wrap gap-2.5">
+                                    <div className="flex flex-wrap gap-3">
                                         {cat.skills.map((skill, sIdx) => (
                                             <span
                                                 key={sIdx}
-                                                className="px-3.5 py-1.5 text-xs font-medium font-space rounded-lg bg-slate-900/90 text-slate-200 border border-white/10 hover:border-primary/50 hover:text-primary transition-colors duration-200"
+                                                className="px-4 py-2 text-xs font-medium font-space rounded-lg bg-slate-900/90 text-slate-200 border border-white/10 hover:border-primary/50 hover:text-primary transition-colors duration-200"
                                             >
                                                 {skill}
                                             </span>
                                         ))}
+                                    </div>
                                     </div>
                                 </SpotlightCard>
                             ))}

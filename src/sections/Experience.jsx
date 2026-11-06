@@ -128,9 +128,10 @@ const Experience = () => {
                                             isEven ? 'md:pl-10' : 'md:pr-10'
                                         }`}
                                     >
-                                        <SpotlightCard className="p-6 md:p-8 text-left space-y-6">
+                                        <SpotlightCard className="p-6 md:p-8 text-left">
+                                            <div className="flex flex-col gap-7">
                                             {/* Role & Period Header */}
-                                            <div className="space-y-2 pb-4 border-b border-white/10">
+                                            <div className="space-y-3 pb-5 border-b border-white/10">
                                                 <div className="flex flex-wrap items-center justify-between gap-2">
                                                     <h3 className="text-xl font-bold font-orbitron text-white flex items-center gap-2">
                                                         <Briefcase className="w-4 h-4 text-primary shrink-0" />
@@ -147,7 +148,7 @@ const Experience = () => {
                                             </div>
 
                                             {/* Key Quantifiable Achievements */}
-                                            <div className="space-y-2.5">
+                                            <div className="space-y-3.5">
                                                 <span className="text-[11px] font-orbitron uppercase tracking-wider text-slate-400 block">
                                                     Thành tựu nổi bật:
                                                 </span>
@@ -165,7 +166,7 @@ const Experience = () => {
                                             </div>
 
                                             {/* Concise Bullet Points with Distinct Spacing */}
-                                            <div className="space-y-2.5">
+                                            <div className="space-y-3.5">
                                                 <span className="text-[11px] font-orbitron uppercase tracking-wider text-slate-400 block">
                                                     Đóng góp & giải pháp kỹ thuật:
                                                 </span>
@@ -176,7 +177,7 @@ const Experience = () => {
                                                     ).map((bullet, bIdx) => (
                                                         <li
                                                             key={bIdx}
-                                                            className="flex items-start gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/5 hover:border-primary/25 transition-colors"
+                                                            className="flex items-start gap-3 p-4 rounded-xl bg-white/[0.02] border border-white/5 hover:border-primary/25 transition-colors"
                                                         >
                                                             <CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                                                             <span className="leading-relaxed">{bullet}</span>
@@ -186,11 +187,11 @@ const Experience = () => {
                                             </div>
 
                                             {/* Skills Tags */}
-                                            <div className="pt-3 border-t border-white/10 space-y-2">
+                                            <div className="pt-6 border-t border-white/10 space-y-3.5">
                                                 <span className="text-[11px] font-orbitron uppercase tracking-wider text-slate-400 block">
                                                     Công nghệ & Kỹ năng áp dụng:
                                                 </span>
-                                                <div className="flex flex-wrap gap-2">
+                                                <div className="flex flex-wrap gap-2.5">
                                                     {(exp.skills || []).map((s, sIdx) => (
                                                         <span
                                                             key={sIdx}
@@ -200,6 +201,7 @@ const Experience = () => {
                                                         </span>
                                                     ))}
                                                 </div>
+                                            </div>
                                             </div>
                                         </SpotlightCard>
                                     </div>
