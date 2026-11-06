@@ -20,23 +20,13 @@ import { SpotlightCard, BlurText, ShinyText, StarBorder } from '../components/re
 const EDUCATION_LIST = [
     {
         degree: 'Cử Nhân Công Nghệ Thông Tin (Kỹ Thuật Phần Mềm)',
-        school: 'Đại Học Văn Hiến (VHU)',
-        period: 'Chuyên Ngành Kỹ Thuật Phần Mềm',
-        gpa: 'Verified Degree',
+        school: 'Đại Học Văn Hiến (Van Hien University — VHU)',
+        period: '2022 - 2026',
+        gpa: 'GPA: 3.0 / 4.0',
         highlights: [
-            'Tập trung chuyên sâu vào Kỹ thuật phần mềm, Kiến trúc Backend (Node.js, Express, NestJS) và Cơ sở dữ liệu (PostgreSQL, MongoDB, MySQL).',
-            'Thực hiện đồ án thực tế Hệ sinh thái F&B thông minh SipPoint (Backend API, Admin POS Portal & Customer Web App).',
-            'Hoàn thành kỳ thực tập thực chiến 3 tháng tại Công ty HiAI, phát triển hệ thống ERP & E-Commerce doanh nghiệp (Phú Hòa Food).',
-        ],
-    },
-    {
-        degree: 'Kinh Nghiệm Kỹ Thuật & Quy Trình Thực Chiến',
-        school: 'Agile / Scrum • GitHub Flow • RESTful API & Realtime Architecture',
-        period: 'Thực Chiến Dự Án',
-        gpa: '20+ Pull Requests',
-        highlights: [
-            'Thành thạo quy trình làm việc nhóm với Jira (Task/Bugfix/Feature), nhánh Git tiêu chuẩn và Code Review qua Pull Request.',
-            'Thiết kế truy vấn SQL CTE nâng cao cho báo cáo xuất-nhập-tồn, tích hợp cổng thanh toán SePay IPN Webhook và Socket.io Realtime.',
+            'Chuyên ngành Kỹ thuật Phần mềm, đào tạo bài bản về cấu trúc dữ liệu, giải thuật, kiến trúc Backend (Node.js, Express, NestJS) và Cơ sở dữ liệu (PostgreSQL, MongoDB, MySQL).',
+            'Hoàn thành Đồ án Tốt nghiệp: Hệ sinh thái F&B thông minh SipPoint (3 phân hệ: Backend API, Admin POS Portal & Khách hàng Web App).',
+            'Kinh nghiệm thực chiến 3 tháng thực tập tại Công ty HiAI: Phát triển hệ thống ERP & E-Commerce Phú Hòa Food (phf-api & phf-ui-web).',
         ],
     },
 ];
@@ -228,7 +218,7 @@ const About = () => {
                         </div>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-6">
+                    <div className="max-w-4xl mx-auto">
                         {EDUCATION_LIST.map((edu, idx) => (
                             <SpotlightCard key={idx} className="p-7 text-left">
                                 <div className="flex flex-wrap items-center justify-between gap-2 mb-4">

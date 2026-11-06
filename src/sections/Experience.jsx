@@ -30,30 +30,6 @@ const Experience = () => {
                 'Git Flow',
             ],
         },
-        {
-            role: 'Lead Fullstack Developer (Đồ Án & Dự Án Thực Tế)',
-            company: 'Hệ Sinh Thái SipPoint F&B & E-Commerce (Forever, Fashion-Store)',
-            period: '2024 - 2026',
-            achievements: [
-                'Kiến trúc 3 phân hệ (BE, POS Portal, Web App)',
-                'Tự động đối soát SePay IPN < 2s',
-                'Tích hợp Gemini 2.5 Flash RAG',
-            ],
-            description: [
-                'Thiết kế và phát triển toàn diện hệ sinh thái SipPoint (SipPoint-BE, SipPoint-Portal, SipPoint-Web-App) với Node.js, Express, MongoDB, Redis và Socket.io thời gian thực.',
-                'Triển khai luồng thanh toán QR và đối soát tự động qua SePay IPN Webhook, hệ thống tích điểm hội viên 4 cấp bậc và vòng quay may mắn có cấu hình xác suất.',
-                'Xây dựng các nền tảng thương mại điện tử Forever (MERN Stack) và Fashion-Store (PHP MVC & MySQL) với đầy đủ tính năng giỏ hàng, Voucher, xếp hạng User và gửi hóa đơn PHPMailer.',
-            ],
-            skills: [
-                'Express.js',
-                'MongoDB',
-                'Redis',
-                'Socket.io',
-                'React 19',
-                'SePay Webhook',
-                'MySQL',
-            ],
-        },
     ]);
 
     useEffect(() => {

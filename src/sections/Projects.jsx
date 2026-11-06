@@ -114,34 +114,6 @@ const DEFAULT_PROJECTS = [
         live: 'https://github.com/ltn23591/Fashion-Store',
         repos: [{ label: 'Source Code', url: 'https://github.com/ltn23591/Fashion-Store' }],
     },
-    {
-        id: 'portfolio-pro-max',
-        isBest: false,
-        title: 'Portfolio Pro Max — Hệ Thống Portfolio 3D, Admin CMS & WebSockets',
-        description:
-            'Hệ thống Portfolio cá nhân tích hợp đồ họa Three.js, hiệu ứng React Bits, cổng quản trị Admin CMS thời gian thực và Backend NestJS + PostgreSQL.',
-        category: 'fullstack',
-        images: [project1Img],
-        metrics: [
-            { label: 'Kiến trúc', value: '3 Tầng' },
-            { label: 'Đồng bộ CMS', value: 'Socket.io' },
-            { label: 'Database', value: 'Neon PG' },
-        ],
-        highlights: [
-            'Kiến trúc 3 tầng gồm Portfolio Frontend (React 19, Three.js, React Bits), Admin CMS (Zustand, Recharts) và Backend (NestJS, Prisma ORM, Neon PostgreSQL).',
-            'Tích hợp Socket.io Gateway theo dõi số lượng khách truy cập trực tiếp và đẩy thông báo tức thì tới Admin khi có thư liên hệ mới.',
-            'Tối ưu hóa điểm số hiệu năng bundle bằng kỹ thuật tách chunk (Manual Chunks) và quản trị động toàn bộ 8 mục nội dung.',
-        ],
-        tech: ['NestJS', 'TypeScript', 'PostgreSQL', 'Prisma', 'React 19', 'Three.js', 'Socket.io'],
-        github: 'https://github.com/ltn23591/Portfolio-landing-pages',
-        live: 'https://github.com/ltn23591/Portfolio-landing-pages',
-        repos: [
-            {
-                label: 'Portfolio Repo',
-                url: 'https://github.com/ltn23591/Portfolio-landing-pages',
-            },
-        ],
-    },
 ];
 
 const ProjectDetailModal = ({ project, onClose }) => {
