@@ -26,3 +26,6 @@ dist-ssr
 # Loại bỏ không đẩy code Admin và Backend lên Git
 admin/
 backend/
+
+.vercel
+.env*

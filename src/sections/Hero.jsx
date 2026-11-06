@@ -1,55 +1,105 @@
 import React from 'react';
 import Button from '../components/Button';
-import { ArrowRight, Download, Github, Linkedin, Mail, Server } from 'lucide-react';
+import { ArrowRight, Download, Github, Linkedin, Mail, Terminal, ShieldCheck, Cpu } from 'lucide-react';
 import { API_URL } from '../config/api';
+import avatarImg from '../assets/images/Avatar.jpg';
+import { ShinyText, BlurText, GradientText, DecryptedText, TiltedCard, SpotlightCard, Magnet } from '../components/reactbits';
 
-const Hero = () => {
+const PARTICLES = [
+    { left: '8%', top: '18%', duration: '12s', delay: '0.5s' },
+    { left: '22%', top: '75%', duration: '16s', delay: '1.2s' },
+    { left: '38%', top: '14%', duration: '14s', delay: '2.4s' },
+    { left: '54%', top: '82%', duration: '18s', delay: '0.8s' },
+    { left: '68%', top: '24%', duration: '15s', delay: '3.1s' },
+    { left: '84%', top: '65%', duration: '13s', delay: '1.7s' },
+    { left: '91%', top: '28%', duration: '17s', delay: '2.9s' },
+    { left: '15%', top: '46%', duration: '19s', delay: '0.3s' },
+];
+
+const Hero = ({ settings }) => {
+    const cvUrl =
+        settings?.resumeUrl && settings.resumeUrl !== '#'
+            ? settings.resumeUrl
+            : '/CV-Le-Trung-Nghia.pdf';
+
     const [heroData, setHeroData] = React.useState({
-        tagline: "Software Engineer & Backend Specialist",
-        title: "Crafting high-performance backend solutions",
-        description: "Hi, I'm Le Trung Nghia. I architect scalable backend systems, design intuitive APIs, and develop premium fullstack applications using React, Node.js, Laravel, and TypeScript.",
-        githubUrl: "https://github.com",
-        linkedinUrl: "https://linkedin.com",
-        emailUrl: "mailto:contact@example.com"
+        tagline: 'Software Engineer',
+        title: 'LÊ TRUNG NGHĨA',
+        subtitle: 'Kiến trúc Hệ thống Backend & Fullstack Hiệu Năng Cao',
+        description:
+            'Sinh viên năm cuối chuyên ngành Kỹ thuật Phần mềm tại Đại học Văn Hiến (VHU) với 3 tháng kinh nghiệm thực tập thực chiến tại Công ty HiAI (Dự án ERP & E-Commerce Phú Hòa Food: phf-api & phf-ui-web). Chuyên sâu về Backend Node.js, Express, NestJS và cơ sở dữ liệu MySQL, MongoDB, PostgreSQL.',
+        githubUrl: 'https://github.com/ltn23591',
+        linkedinUrl: 'https://linkedin.com',
+        emailUrl: 'mailto:ltn23591@gmail.com',
+        avatarUrl: '',
+    });
+
+    const [statsData, setStatsData] = React.useState({
+        statExp: '6+ Tháng',
+        statProjects: '5+ Hệ thống',
+        statSatisfaction: '< 100ms',
+        statOpenSource: '99.95% Uptime',
     });
 
     React.useEffect(() => {
-        const fetchHero = async () => {
+        const fetchHeroAndStats = async () => {
             try {
-                const res = await fetch(`${API_URL}/api/portfolio/hero`);
-                if (res.ok) {
-                    const data = await res.json();
+                const [heroRes, aboutRes] = await Promise.all([
+                    fetch(`${API_URL}/api/portfolio/hero`),
+                    fetch(`${API_URL}/api/portfolio/about`),
+                ]);
+
+                if (heroRes.ok) {
+                    const data = await heroRes.json();
                     if (data) {
-                        setHeroData({
-                            tagline: data.tagline,
-                            title: data.title,
-                            description: data.description,
-                            githubUrl: data.githubUrl || "https://github.com",
-                            linkedinUrl: data.linkedinUrl || "https://linkedin.com",
-                            emailUrl: data.emailUrl ? (data.emailUrl.startsWith('mailto:') || data.emailUrl.includes('@') ? (data.emailUrl.startsWith('mailto:') ? data.emailUrl : `mailto:${data.emailUrl}`) : data.emailUrl) : "mailto:contact@example.com"
-                        });
+                        setHeroData((prev) => ({
+                            ...prev,
+                            tagline: data.tagline || prev.tagline,
+                            title: data.title || prev.title,
+                            description: data.description || prev.description,
+                            githubUrl: data.githubUrl || prev.githubUrl,
+                            linkedinUrl: data.linkedinUrl || prev.linkedinUrl,
+                            emailUrl: data.emailUrl
+                                ? data.emailUrl.startsWith('mailto:')
+                                    ? data.emailUrl
+                                    : `mailto:${data.emailUrl}`
+                                : prev.emailUrl,
+                            avatarUrl: data.avatarUrl || '',
+                        }));
                     }
                 }
-            } catch (err) {
-                console.log('Using default mock values for Hero section.');
+
+                if (aboutRes.ok) {
+                    const about = await aboutRes.json();
+                    if (about) {
+                        setStatsData((prev) => ({
+                            statExp: about.statExp || prev.statExp,
+                            statProjects: about.statProjects || prev.statProjects,
+                            statSatisfaction: about.statSatisfaction || prev.statSatisfaction,
+                            statOpenSource: about.statOpenSource || prev.statOpenSource,
+                        }));
+                    }
+                }
+            } catch {
+                // Keep default values when offline
             }
         };
-        fetchHero();
+        fetchHeroAndStats();
     }, []);
 
-    const handleScrollToContact = (e) => {
+    const handleScrollToSection = (e, id) => {
         e.preventDefault();
-        const target = document.getElementById('contact');
+        const target = document.getElementById(id);
         if (target) {
             window.scrollTo({
                 top: target.offsetTop - 80,
-                behavior: 'smooth'
+                behavior: 'smooth',
             });
         }
     };
 
     return (
-        <section id="hero" className="relative min-h-screen flex items-center overflow-hidden mesh-gradient-1 pt-24">
+        <section id="hero" className="relative min-h-screen flex items-center overflow-hidden mesh-gradient-1 pt-24 pb-16">
             {/* Grid Pattern overlay */}
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
 
@@ -59,188 +109,180 @@ const Hero = () => {
 
             {/* Drift Particles */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                {[...Array(20)].map((_, i) => (
+                {PARTICLES.map((p, i) => (
                     <div
                         key={i}
-                        className="absolute w-1.5 h-1.5 rounded-full bg-primary/30"
+                        className="absolute w-1.5 h-1.5 rounded-full bg-primary/35"
                         style={{
-                            left: `${Math.random() * 100}%`,
-                            top: `${Math.random() * 100}%`,
-                            animation: `float-slow ${10 + Math.random() * 15}s ease-in-out infinite`,
-                            animationDelay: `${Math.random() * 5}s`,
+                            left: p.left,
+                            top: p.top,
+                            animation: `float-slow ${p.duration} ease-in-out infinite`,
+                            animationDelay: p.delay,
                         }}
                     />
                 ))}
             </div>
 
             {/* Main Content */}
-            <div className="container mx-auto px-6 py-20 relative z-10">
+            <div className="container mx-auto px-6 relative z-10">
                 <div className="grid lg:grid-cols-12 gap-12 items-center">
-                    {/* Left Column: Text & CTAs (7 cols on lg) */}
-                    <div className="lg:col-span-7 space-y-8 text-left animate-fade-in-up">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border-primary/20 text-primary text-sm font-semibold tracking-wide">
-                            <span className="relative flex h-2 w-2">
+                    {/* Left Column: 1. Introduce (Title & Short Bio) */}
+                    <div className="lg:col-span-7 space-y-7 text-left animate-fade-in-up">
+                        <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full glass border-primary/30 text-sm font-medium tracking-wider uppercase">
+                            <span className="relative flex h-2.5 w-2.5">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-teal-500"></span>
+                                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-teal-500"></span>
                             </span>
-                            {heroData.tagline}
+                            <ShinyText text={heroData.tagline} speed={3} className="font-orbitron text-xs font-bold" />
                         </div>
 
                         {/* Title */}
                         <div className="space-y-4">
-                            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold font-outfit tracking-tight text-white leading-[1.1]">
-                                {heroData.title.includes('high-performance') ? (
-                                    <>
-                                        Crafting <br />
-                                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-teal-400 to-secondary glow-text">
-                                            high-performance
-                                        </span>
-                                        <br />
-                                        backend solutions with <br />
-                                        <span className="font-serif italic font-normal text-slate-300">
-                                            engineering precision.
-                                        </span>
-                                    </>
-                                ) : (
-                                    heroData.title
-                                )}
+                            <p className="text-xs md:text-sm font-orbitron uppercase tracking-[0.25em] text-primary">
+                                <DecryptedText text="// FULLSTACK & BACKEND ENGINEER" speed={30} />
+                            </p>
+                            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold font-orbitron tracking-tight text-white leading-[1.15]">
+                                <BlurText text="XIN CHÀO, TÔI LÀ" delay={70} className="block text-slate-200 text-2xl sm:text-3xl mb-2 justify-start" />
+                                <GradientText className="font-orbitron font-black tracking-wide">
+                                    {heroData.title}
+                                </GradientText>
                             </h1>
-                            <p className="text-lg md:text-xl text-muted-foreground max-w-xl font-outfit font-light leading-relaxed">
+                            <h2 className="text-xl sm:text-2xl font-orbitron font-semibold text-slate-300">
+                                {heroData.subtitle}
+                            </h2>
+                            <p className="text-base md:text-lg text-muted-foreground max-w-2xl font-space leading-relaxed">
                                 {heroData.description}
                             </p>
                         </div>
 
+                        {/* Quick Highlight Pills synced with About stats */}
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl pt-1">
+                            {[
+                                { label: 'Kinh nghiệm', value: statsData.statExp },
+                                { label: 'Dự án thực chiến', value: statsData.statProjects },
+                                { label: 'Độ trễ API TB', value: statsData.statSatisfaction },
+                                { label: 'Độ ổn định', value: statsData.statOpenSource },
+                            ].map((item, idx) => (
+                                <SpotlightCard key={idx} className="p-3.5 text-left">
+                                    <div className="text-base md:text-lg font-orbitron font-bold text-primary">
+                                        {item.value}
+                                    </div>
+                                    <div className="text-xs text-muted-foreground font-space mt-0.5">
+                                        {item.label}
+                                    </div>
+                                </SpotlightCard>
+                            ))}
+                        </div>
+
                         {/* CTA Buttons */}
-                        <div className="flex flex-wrap gap-4 items-center">
-                            <Button 
-                                size="lg" 
-                                variant="primary"
-                                onClick={handleScrollToContact}
-                            >
-                                Hợp Tác Ngay <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-                            </Button>
-                            
-                            <Button 
-                                size="lg" 
-                                variant="outline"
-                                className="group"
-                            >
-                                <Download className="w-4 h-4 mr-2 text-primary group-hover:text-white" />
-                                Tải CV
-                            </Button>
+                        <div className="flex flex-wrap gap-4 items-center pt-2">
+                            <Magnet padding={30} magnetStrength={4}>
+                                <Button
+                                    size="lg"
+                                    variant="primary"
+                                    onClick={(e) => handleScrollToSection(e, 'projects')}
+                                >
+                                    Xem Dự Án Nổi Bật <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                                </Button>
+                            </Magnet>
+
+                            <Magnet padding={30} magnetStrength={4}>
+                                <a
+                                    href={cvUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    download="CV-Le-Trung-Nghia.pdf"
+                                    className="inline-flex items-center justify-center rounded-full font-orbitron font-medium transition-all duration-300 px-8 py-4 text-sm border border-primary/50 text-foreground hover:bg-primary/10 hover:border-primary group cursor-pointer"
+                                >
+                                    <Download className="w-4 h-4 mr-2 text-primary group-hover:text-white" />
+                                    Tải CV (PDF)
+                                </a>
+                            </Magnet>
                         </div>
 
                         {/* Social Profile Connections */}
-                        <div className="pt-4 flex items-center gap-4">
-                            <span className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Kết nối:</span>
+                        <div className="pt-2 flex items-center gap-4">
+                            <span className="text-xs font-orbitron font-semibold text-muted-foreground uppercase tracking-wider">
+                                Liên kết cá nhân:
+                            </span>
                             <div className="flex items-center gap-3">
                                 {[
-                                    { icon: <Github className="w-5 h-5" />, href: heroData.githubUrl, label: "GitHub" },
-                                    { icon: <Linkedin className="w-5 h-5" />, href: heroData.linkedinUrl, label: "LinkedIn" },
-                                    { icon: <Mail className="w-5 h-5" />, href: heroData.emailUrl, label: "Email" }
+                                    { icon: <Github className="w-5 h-5" />, href: heroData.githubUrl, label: 'GitHub' },
+                                    { icon: <Linkedin className="w-5 h-5" />, href: heroData.linkedinUrl, label: 'LinkedIn' },
+                                    { icon: <Mail className="w-5 h-5" />, href: heroData.emailUrl, label: 'Email' },
                                 ].map((soc, idx) => (
-                                    <a
-                                        key={idx}
-                                        href={soc.href}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        aria-label={soc.label}
-                                        className="w-10 h-10 rounded-full glass border-border hover:border-primary/50 text-muted-foreground hover:text-primary flex items-center justify-center transition-all duration-300 hover:scale-110"
-                                    >
-                                        {soc.icon}
-                                    </a>
+                                    <Magnet key={idx} padding={20} magnetStrength={3}>
+                                        <a
+                                            href={soc.href}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            aria-label={soc.label}
+                                            className="w-10 h-10 rounded-full glass border-border hover:border-primary/50 text-muted-foreground hover:text-primary flex items-center justify-center transition-all duration-300 hover:scale-110"
+                                        >
+                                            {soc.icon}
+                                        </a>
+                                    </Magnet>
                                 ))}
                             </div>
                         </div>
                     </div>
 
-                    {/* Right Column: Premium Mock Terminal/IDE Sandbox (5 cols on lg) */}
-                    <div className="lg:col-span-5 relative animate-fade-in-up delay-200">
-                        {/* Decorative glow backing */}
-                        <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 to-secondary/10 rounded-2xl blur-3xl -z-10" />
-                        
-                        {/* Terminal Box */}
-                        <div className="glass rounded-2xl overflow-hidden shadow-2xl border border-white/10 glow-hover">
-                            {/* Window Header */}
-                            <div className="bg-slate-900/60 px-4 py-3 border-b border-white/5 flex items-center justify-between">
-                                <div className="flex items-center gap-1.5">
-                                    <span className="w-3 h-3 rounded-full bg-rose-500/80" />
-                                    <span className="w-3 h-3 rounded-full bg-amber-500/80" />
-                                    <span className="w-3 h-3 rounded-full bg-emerald-500/80" />
-                                </div>
-                                <span className="text-xs text-muted-foreground font-mono flex items-center gap-1.5">
-                                    <Server className="w-3 h-3 text-primary" /> server.ts — Node.js
-                                </span>
-                                <span className="w-8" />
-                            </div>
+                    {/* Right Column: Personal Portrait Card (React Bits TiltedCard) */}
+                    <div className="lg:col-span-5 relative animate-fade-in-up delay-200 flex justify-center">
+                        <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-secondary/20 rounded-3xl blur-3xl -z-10" />
 
-                            {/* Code Area */}
-                            <div className="p-6 font-mono text-sm text-left overflow-x-auto space-y-2 bg-[#0c1219]/90">
-                                <div>
-                                    <span className="text-pink-400">import</span> express <span className="text-pink-400">from</span> <span className="text-teal-300">'express'</span>;
+                        <TiltedCard className="w-full max-w-md" maxTilt={7}>
+                            <SpotlightCard className="p-5 rounded-3xl border border-primary/30 shadow-2xl">
+                                {/* Top Cyber Bar */}
+                                <div className="flex items-center justify-between pb-4 mb-4 border-b border-white/10">
+                                    <div className="flex items-center gap-2">
+                                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+                                        <span className="text-xs font-orbitron tracking-wider text-slate-300 uppercase">
+                                            ID: LTN-DEV
+                                        </span>
+                                    </div>
+                                    <span className="text-[11px] font-mono text-primary bg-primary/10 px-2.5 py-0.5 rounded-full border border-primary/20">
+                                        Available for Hire
+                                    </span>
                                 </div>
-                                <div>
-                                    <span className="text-pink-400">import</span> &#123; Database &#125; <span className="text-pink-400">from</span> <span className="text-teal-300">'@db/postgres'</span>;
+
+                                {/* Personal Image Frame */}
+                                <div className="relative rounded-2xl overflow-hidden aspect-[4/4.5] bg-slate-900 border border-white/10 group">
+                                    <img
+                                        src={heroData.avatarUrl || avatarImg}
+                                        alt="Lê Trung Nghĩa - Software Engineer"
+                                        className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-[#080c10] via-transparent to-transparent opacity-80" />
+
+                                    {/* Bottom Overlay Info inside Image */}
+                                    <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between">
+                                        <div>
+                                            <p className="text-xs font-orbitron text-primary uppercase tracking-widest">
+                                                Software Engineer
+                                            </p>
+                                            <h3 className="text-xl font-orbitron font-bold text-white">
+                                                Lê Trung Nghĩa
+                                            </h3>
+                                        </div>
+                                        <div className="p-2.5 rounded-xl bg-slate-950/80 backdrop-blur-md border border-primary/30 text-primary">
+                                            <Cpu className="w-5 h-5" />
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="text-muted-foreground/60">// Initialize application core</div>
-                                <div>
-                                    <span className="text-pink-400">const</span> app = <span className="text-cyan-400">express</span>();
+
+                                {/* Tech Stack Footer inside Portrait Card */}
+                                <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs text-muted-foreground font-space">
+                                    <span className="flex items-center gap-1.5 text-slate-300">
+                                        <Terminal className="w-3.5 h-3.5 text-primary" />
+                                        Node.js • Express • NestJS • React • SQL
+                                    </span>
+                                    <span className="flex items-center gap-1 text-emerald-400 font-semibold">
+                                        <ShieldCheck className="w-4 h-4" /> Verified
+                                    </span>
                                 </div>
-                                <div>
-                                    <span className="text-pink-400">const</span> db = <span className="text-pink-400">new</span> <span className="text-amber-300">Database</span>();
-                                </div>
-                                <br />
-                                <div>
-                                    app.<span className="text-cyan-400">use</span>(express.<span className="text-cyan-400">json</span>());
-                                </div>
-                                <br />
-                                <div className="text-muted-foreground/60">// Premium API Endpoint</div>
-                                <div>
-                                    app.<span className="text-cyan-400">get</span>(<span className="text-teal-300">"/api/v1/engineer"</span>, (req, res) =&gt; &#123;
-                                </div>
-                                <div className="pl-4">
-                                    res.<span className="text-cyan-400">json</span>(&#123;
-                                </div>
-                                <div className="pl-8 text-slate-300">
-                                    name: <span className="text-teal-300">"Le Trung Nghia"</span>,
-                                </div>
-                                <div className="pl-8 text-slate-300">
-                                    title: <span className="text-teal-300">"Backend Developer"</span>,
-                                </div>
-                                <div className="pl-8 text-slate-300">
-                                    tech: [<span className="text-teal-300">"Node.js"</span>, <span className="text-teal-300">"React"</span>, <span className="text-teal-300">"Laravel"</span>],
-                                </div>
-                                <div className="pl-8 text-slate-300">
-                                    uiUxProMax: <span className="text-amber-400">true</span>,
-                                </div>
-                                <div className="pl-8 text-slate-300">
-                                    status: <span className="text-teal-300">"Ready to build"</span>
-                                </div>
-                                <div className="pl-4">
-                                    &#125;);
-                                </div>
-                                <div>
-                                    &#125;);
-                                </div>
-                                <br />
-                                <div className="text-muted-foreground/60">// Start Server listener</div>
-                                <div>
-                                    app.<span className="text-cyan-400">listen</span>(<span className="text-purple-400">8080</span>, () =&gt; &#123;
-                                </div>
-                                <div className="pl-4 text-emerald-400">
-                                    console.<span className="text-cyan-400">log</span>(<span className="text-teal-300">"🚀 Server online at port 8080"</span>);
-                                </div>
-                                <div>
-                                    &#125;);
-                                </div>
-                            </div>
-                            
-                            {/* Terminal Footer */}
-                            <div className="bg-slate-900/40 px-4 py-2 border-t border-white/5 flex items-center justify-between text-xs text-muted-foreground font-mono">
-                                <span>UTF-8</span>
-                                <span>TypeScript (v5.1.0)</span>
-                            </div>
-                        </div>
+                            </SpotlightCard>
+                        </TiltedCard>
                     </div>
                 </div>
             </div>

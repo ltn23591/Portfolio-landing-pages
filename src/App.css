@@ -1,6 +1,10 @@
 @import 'tailwindcss';
 
 @theme {
+    --font-sans: 'Space Grotesk', sans-serif;
+    --font-display: 'Orbitron', sans-serif;
+    --font-mono: 'Fira Code', monospace;
+
     --color-background: #080c10;
     --color-foreground: #f0f2f5;
 
@@ -81,8 +85,12 @@
     html, body {
         background-color: #080c10;
         color: var(--color-foreground);
-        font-family: 'Outfit', 'Inter', sans-serif;
+        font-family: 'Space Grotesk', sans-serif;
         overflow-x: clip;
+    }
+
+    h1, h2, h3, h4 {
+        font-family: 'Orbitron', 'Space Grotesk', sans-serif;
     }
 
     /* Custom Scrollbar */
@@ -104,24 +112,24 @@
 @layer components {
     /* UI Pro Max Glassmorphism */
     .glass {
-        background: rgba(12, 18, 25, 0.7);
+        background: rgba(12, 18, 25, 0.72);
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.06);
     }
     
     .glass-strong {
-        background: rgba(8, 12, 16, 0.9);
+        background: rgba(8, 12, 16, 0.92);
         backdrop-filter: blur(24px);
         -webkit-backdrop-filter: blur(24px);
         border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .glass-pill {
-        background: rgba(12, 18, 25, 0.5);
+        background: rgba(12, 18, 25, 0.55);
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(20, 184, 166, 0.15);
+        border: 1px solid rgba(20, 184, 166, 0.18);
     }
 
     /* Hover Glow effects */
@@ -150,15 +158,21 @@
             radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.1) 0px, transparent 50%);
     }
 
-    /* Fonts Mapping */
-    .font-serif {
-        font-family: 'Playfair Display', serif;
+    /* Fonts Mapping: Orbitron & Space Grotesk */
+    .font-orbitron {
+        font-family: 'Orbitron', sans-serif;
     }
-    .font-mono {
-        font-family: 'Fira Code', 'Courier New', monospace;
+    .font-space {
+        font-family: 'Space Grotesk', sans-serif;
     }
     .font-outfit {
-        font-family: 'Outfit', sans-serif;
+        font-family: 'Orbitron', sans-serif;
+    }
+    .font-serif {
+        font-family: 'Orbitron', sans-serif;
+    }
+    .font-mono {
+        font-family: 'Fira Code', 'Space Grotesk', monospace;
     }
 }
 
@@ -197,6 +211,50 @@
         }
     }
 
+    /* React Bits Keyframes */
+    @keyframes rb-shine {
+        0% {
+            background-position: 100%;
+        }
+        100% {
+            background-position: -100%;
+        }
+    }
+
+    @keyframes rb-gradient {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    @keyframes rb-star-bottom {
+        0% {
+            transform: translate(0%, 0%);
+            opacity: 1;
+        }
+        100% {
+            transform: translate(-100%, 0%);
+            opacity: 0;
+        }
+    }
+
+    @keyframes rb-star-top {
+        0% {
+            transform: translate(0%, 0%);
+            opacity: 1;
+        }
+        100% {
+            transform: translate(100%, 0%);
+            opacity: 0;
+        }
+    }
+
     .animate-fade-in-up {
         animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
@@ -207,6 +265,15 @@
 
     .animate-pulse-glow {
         animation: pulse-glow 3s ease-in-out infinite;
+    }
+
+    .animate-rb-shine {
+        animation: rb-shine 4s linear infinite;
+    }
+
+    .animate-rb-gradient {
+        background-size: 300% 100%;
+        animation: rb-gradient 6s ease infinite;
     }
 
     /* Delays */

@@ -5,7 +5,8 @@ const ThreeCanvas = () => {
     const containerRef = useRef(null);
 
     useEffect(() => {
-        if (!containerRef.current) return;
+        const container = containerRef.current;
+        if (!container) return;
 
         // 1. Scene & Camera Setup
         const scene = new THREE.Scene();
@@ -25,7 +26,7 @@ const ThreeCanvas = () => {
         });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        containerRef.current.appendChild(renderer.domElement);
+        container.appendChild(renderer.domElement);
 
         // 3. 3D Geometries & Floating Objects (Three.js Journey Style)
         const objectsGroup = new THREE.Group();
@@ -203,8 +204,8 @@ const ThreeCanvas = () => {
         return () => {
             window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('resize', handleResize);
-            if (containerRef.current && renderer.domElement) {
-                containerRef.current.removeChild(renderer.domElement);
+            if (container && renderer.domElement) {
+                container.removeChild(renderer.domElement);
             }
             renderer.dispose();
         };
